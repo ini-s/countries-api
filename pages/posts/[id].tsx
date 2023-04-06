@@ -1,5 +1,3 @@
-import { HeaderStyle } from '../../styles/main.styles'
-import { HiOutlineMoon } from "react-icons/hi"
 import Head from 'next/head'
 import GlobalStyles from "../../styles/globals.styles"
 import { Link, BackBtn, DetailsBox, ImageBox, DesktopImageBox, Col, Cols, Borders } from "../../styles/[id].styles"
@@ -8,6 +6,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import Header from "../../component/Header"
 
 const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
+const dev = process.env.NODE_ENV !== 'production';
 
 interface CurrencyProp {
     name: string,
@@ -54,7 +53,7 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
                 </Link>
                 <DetailsBox>
                     <ImageBox src={props.countryData.flag} alt="flag" width={330} height={165} />
-                    <DesktopImageBox src={props.countryData.flag} alt="flag" width={520} height={360} />
+                    <DesktopImageBox src={props.countryData.flag} alt="flag" width={520} height={360} priority />
                     <div>
                         <h2>
                             {props.countryData.name}
@@ -87,7 +86,7 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
 }
 
 async function getData() {
-    const data = fetcher('http://localhost:3000/api/staticdata')
+    const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : 'https://vercel.com/api/staticdata')
     return data
 }
 

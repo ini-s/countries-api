@@ -1,4 +1,4 @@
-import {  HeaderStyle } from '../../styles/main.styles'
+import { HeaderStyle } from '../../styles/main.styles'
 import { HiOutlineMoon } from "react-icons/hi"
 import Head from 'next/head'
 import GlobalStyles from "../../styles/globals.styles"
@@ -51,10 +51,10 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
             <Header />
             <main>
                 <Link href="/">
-                <BackBtn>
-                    <HiOutlineArrowLeft />
-                    <p>Back</p>
-                </BackBtn>
+                    <BackBtn>
+                        <HiOutlineArrowLeft />
+                        <p>Back</p>
+                    </BackBtn>
                 </Link>
                 <DetailsBox>
                     <ImageBox src={props.countryData.flag} alt="flag" width={330} height={165} />

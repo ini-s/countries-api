@@ -177,7 +177,7 @@ export const CountriesBox = styled.section`
 
     
     body.dark & > a{
-        color: hsl(0, 0%, 100%)
+        color: hsl(0, 0%, 100%);
     }
 
     & > a{
@@ -257,6 +257,10 @@ export const Pagination = styled.div`
 export const Btn = styled.div`
     font-size: 2rem;
     display: flex;
+
+    body.dark &{
+        color: hsl(0, 0%, 100%);
+    }
 `
 
 export const PageNumbers = styled.div`
@@ -265,4 +269,8 @@ export const PageNumbers = styled.div`
     gap: 1rem;
     font-size: 1.2rem;
     margin: 0 1rem;
+
+    body.dark & {
+        color: hsl(0, 0%, 100%);
+    }
 `

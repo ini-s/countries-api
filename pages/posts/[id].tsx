@@ -86,7 +86,7 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
 }
 
 async function getData() {
-    const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : 'https://vercel.com/api/staticdata')
+    const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
     return data
 }
 

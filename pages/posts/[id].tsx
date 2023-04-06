@@ -4,9 +4,9 @@ import { Link, BackBtn, DetailsBox, ImageBox, DesktopImageBox, Col, Cols, Border
 import { HiOutlineArrowLeft } from "react-icons/hi"
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Header from "../../component/Header"
-
-const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
-const dev = process.env.NODE_ENV !== 'production';
+import fs from 'fs/promises';
+// const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
+// const dev = process.env.NODE_ENV !== 'production';
 
 interface CurrencyProp {
     name: string,
@@ -85,9 +85,16 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
     )
 }
 
+// async function getData() {
+//     const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
+//     return data
+// }
+
 async function getData() {
-    const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
-    return data
+    const filePath = process.cwd() + '/data.json';
+    const fileData = await fs.readFile(filePath);
+    const data = JSON.parse(fileData.toString());
+    return data;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

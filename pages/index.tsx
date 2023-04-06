@@ -130,7 +130,7 @@ export default function Home() {
               <Link href={"/posts/" + country.name} >
                 <Country key={country.name}>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
-                  <Description>
+                  <Description key={country.name}>
                     <h2>{country.name}</h2>
                     <p><Bold>Population: </Bold>{country.population}</p>
                     <p><Bold>Region: </Bold>{country.region}</p>
@@ -162,7 +162,7 @@ export default function Home() {
                 <Link href={"/posts/" + country.name} >
                   <Country key={country.name}>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description>
+                    <Description key={country.name}>
                       <h2>{country.name}</h2>
                       <p><Bold>Population: </Bold>{country.population}</p>
                       <p><Bold>Region: </Bold>{country.region}</p>
@@ -175,7 +175,7 @@ export default function Home() {
                 <Link href={"/posts/" + country.name} >
                   <Country key={country.name}>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description>
+                    <Description key={country.name}>
                       <h2>{country.name}</h2>
                       <p><Bold>Population: </Bold>{country.population}</p>
                       <p><Bold>Region: </Bold>{country.region}</p>

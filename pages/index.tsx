@@ -127,10 +127,10 @@ export default function Home() {
         {search.length === 0 && region.length === 0 ?
           <Countries>
             {currentPost?.map((country) =>
-              <Link href={"/posts/" + country.name} >
-                <Country key={country.name}>
+              <Link href={"/posts/" + country.name} key={country.name} >
+                <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
-                  <Description key={country.name}>
+                  <Description>
                     <h2>{country.name}</h2>
                     <p><Bold>Population: </Bold>{country.population}</p>
                     <p><Bold>Region: </Bold>{country.region}</p>
@@ -159,10 +159,10 @@ export default function Home() {
           <CountriesBox>{
             region.length > 0 ?
               currentPost?.filter(country => country.region === region).map(country => country.name.includes(search) &&
-                <Link href={"/posts/" + country.name} >
-                  <Country key={country.name}>
+                <Link href={"/posts/" + country.name} key={country.name} >
+                  <Country>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description key={country.name}>
+                    <Description>
                       <h2>{country.name}</h2>
                       <p><Bold>Population: </Bold>{country.population}</p>
                       <p><Bold>Region: </Bold>{country.region}</p>
@@ -172,10 +172,10 @@ export default function Home() {
                 </Link>
               ) :
               currentPost?.map(country => country.name.includes(search) &&
-                <Link href={"/posts/" + country.name} >
-                  <Country key={country.name}>
+                <Link href={"/posts/" + country.name} key={country.name} >
+                  <Country>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description key={country.name}>
+                    <Description>
                       <h2>{country.name}</h2>
                       <p><Bold>Population: </Bold>{country.population}</p>
                       <p><Bold>Region: </Bold>{country.region}</p>

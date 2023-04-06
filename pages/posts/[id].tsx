@@ -5,8 +5,8 @@ import { HiOutlineArrowLeft } from "react-icons/hi"
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Header from "../../component/Header"
 import fs from 'fs/promises';
-// const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
-// const dev = process.env.NODE_ENV !== 'production';
+const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
+const dev = process.env.NODE_ENV !== 'production';
 
 interface CurrencyProp {
     name: string,
@@ -69,7 +69,8 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
                             <Col>
                                 <p><span>Top Level Domain: </span>{props.countryData.topLevelDomain}</p>
                                 <p><span>Currencies: </span>{props.countryData.currencies?.map(currency => currency.name)}</p>
-                                <p><span>Languages: </span>{props.countryData.languages?.map(language => language.name)}</p>
+                                <p><span>Languages: </span>{props.countryData.languages?.map((language, index) =>
+                                (props.countryData.languages.length -1) === index? language.name : `${language.name}, ` )}</p>
                             </Col>
                         </Cols>
                         <Borders>
@@ -85,17 +86,21 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
     )
 }
 
-// async function getData() {
-//     const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
-//     return data
-// }
-
 async function getData() {
-    const filePath = process.cwd() + '/data.json';
-    const fileData = await fs.readFile(filePath);
-    const data = JSON.parse(fileData.toString());
-    return data;
+    // const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
+    const vercel_public_domain = process.env.NEXT_PUBLIC_DOMAIN
+    const data = fetcher(vercel_public_domain ? vercel_public_domain : (dev ? `http://localhost:3000/api/staticdata` : 'https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata'))
+    return data
 }
+
+console.log(process.env.NEXT_PUBLIC_VERCEL_URL)
+
+// async function getData() {
+//     const filePath = process.cwd() + '/data.json';
+//     const fileData = await fs.readFile(filePath);
+//     const data = JSON.parse(fileData.toString());
+//     return data;
+// }
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const data = await getData();

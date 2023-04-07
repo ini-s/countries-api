@@ -139,8 +139,8 @@ export default function Home() {
             )
             :
             // search.length > 0 ?
-            filteredPost.map(country => country.name.includes(search) &&
-              <Link href={"/posts/" + country.name} key={country.name} >
+            data.map(country => country.name.includes(search) &&
+              <Link href={"/posts/" + country.name} key={country.name}>
                 <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
                   <Description>

@@ -29,31 +29,26 @@ export default function Home() {
   const [region, setRegion] = useState<string>("")
   const [inputValue, setInputValue] = useState<string>("")
   const [dropdown, setDropdown] = useState<boolean>(false)
-  const { data, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
+  const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
+  const data = postData || [];
   const [currentPage, SetCurrentPage] = useState<number>(1)
+  const [filteredPost, settFilteredPost] = useState(data)
 
-  const PostPerPage: number = 13
-  const endIndex: number = currentPage * PostPerPage
-  const startIndex: number = endIndex - PostPerPage
-  const currentPost = data?.slice(startIndex, endIndex)
-  console.log(endIndex, startIndex, currentPost)
-  const pageNumbers: number[] = []
-  console.log(data?.length, typeof (data))
-  const maxPageNumbers = Math.ceil(250 / PostPerPage)
+  const postPerPage = 13
+  const endIndex = currentPage * postPerPage
+  const startIndex = endIndex - postPerPage
+  const currentPost = data.slice(startIndex, endIndex)
+  const filteredPostData = filteredPost.slice(startIndex, endIndex)
+  console.log(endIndex, startIndex, currentPost, filteredPostData)
+  const pageNumbers = []
+  const maxPageNumbers = Math.ceil(data.length / postPerPage)
   for (let i = 1; i <= maxPageNumbers; i++) {
     pageNumbers.push(i)
   }
-
-  function changePageNumber() {
-    if (currentPage > pageNumbers.length) {
-      SetCurrentPage(currentPage => currentPage - 1)
-    }
-    if (currentPage < pageNumbers.length) {
-      SetCurrentPage(currentPage => currentPage + 1)
-    }
-    else {
-      SetCurrentPage(1)
-    }
+  const filteredPageNumbers = []
+  const maxFilteredPageNumbers = Math.ceil(filteredPost.length / postPerPage)
+  for (let i = 1; i <= maxFilteredPageNumbers; i++) {
+    filteredPageNumbers.push(i)
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,14 +73,19 @@ export default function Home() {
   }
 
   function showCountries(name: string) {
+    const post = data.filter(country => country.region === name)
     if (name === "All") {
       setRegion("")
     }
     else {
       setRegion(name)
+      settFilteredPost(post)
+      console.log(name)
+      console.log(region)
+      console.log(post)
     }
+    setDropdown(false)
   }
-  console.log(region)
 
   if (error) return <p>Failed to load</p>
   if (!data) return <p>Loading...</p>
@@ -109,9 +109,9 @@ export default function Home() {
               <BiSearch />
             </SearchIcon>
           </Search>
-          <Filter>
+          <Filter onClick={showDropdown}>
             <p>Filter by Region</p>
-            <div><IoIosArrowDown onClick={showDropdown} /></div>
+            <div><IoIosArrowDown /></div>
           </Filter>
           {dropdown &&
             <Dropdown>
@@ -126,7 +126,7 @@ export default function Home() {
         </Top>
         {search.length === 0 && region.length === 0 ?
           <Countries>
-            {currentPost?.map((country) =>
+            {currentPost.map((country) =>
               <Link href={"/posts/" + country.name} key={country.name} >
                 <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -140,7 +140,7 @@ export default function Home() {
               </Link>
             )}
             <Pagination>
-              <Btn onClick={changePageNumber}>
+              <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
                 <GrFormPrevious />
               </Btn>
               <PageNumbers>
@@ -150,7 +150,7 @@ export default function Home() {
                     {pageNumber}
                   </div>)}
               </PageNumbers>
-              <Btn onClick={changePageNumber}>
+              <Btn onClick={() => SetCurrentPage(currentPage => currentPage + 1)}>
                 <GrFormNext />
               </Btn>
             </Pagination>
@@ -158,7 +158,7 @@ export default function Home() {
           :
           <CountriesBox>{
             region.length > 0 ?
-              currentPost?.filter(country => country.region === region).map(country => country.name.includes(search) &&
+              filteredPostData.map(country => country.name.includes(search) &&
                 <Link href={"/posts/" + country.name} key={country.name} >
                   <Country>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -171,7 +171,7 @@ export default function Home() {
                   </Country>
                 </Link>
               ) :
-              currentPost?.map(country => country.name.includes(search) &&
+              currentPost.map(country => country.name.includes(search) &&
                 <Link href={"/posts/" + country.name} key={country.name} >
                   <Country>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -185,7 +185,7 @@ export default function Home() {
                 </Link>
               )}
             <Pagination>
-              <Btn onClick={changePageNumber}>
+              <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
                 <GrFormPrevious />
               </Btn>
               <PageNumbers>
@@ -195,7 +195,7 @@ export default function Home() {
                     {pageNumber}
                   </div>)}
               </PageNumbers>
-              <Btn onClick={changePageNumber}>
+              <Btn onClick={() => SetCurrentPage(currentPage => currentPage + 1)}>
                 <GrFormNext />
               </Btn>
             </Pagination>

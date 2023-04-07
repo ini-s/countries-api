@@ -70,7 +70,7 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
                                 <p><span>Top Level Domain: </span>{props.countryData.topLevelDomain}</p>
                                 <p><span>Currencies: </span>{props.countryData.currencies?.map(currency => currency.name)}</p>
                                 <p><span>Languages: </span>{props.countryData.languages?.map((language, index) =>
-                                (props.countryData.languages.length -1) === index? language.name : `${language.name}, ` )}</p>
+                                    (props.countryData.languages.length - 1) === index ? language.name : `${language.name}, `)}</p>
                             </Col>
                         </Cols>
                         <Borders>

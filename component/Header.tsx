@@ -1,6 +1,6 @@
 import { HeaderStyle } from '../styles/main.styles'
 import { useState, useEffect } from "react"
-import { HiOutlineMoon, HiMoon } from "react-icons/hi"
+import { HiSun, HiMoon } from "react-icons/hi"
 
 export default function Header() {
     const [darkMode, setDarkMode] = useState<boolean>(typeof window !== "undefined" ? JSON.parse(localStorage.getItem("theme") || "false") : false)
@@ -25,12 +25,18 @@ export default function Header() {
     return (
         <HeaderStyle>
             <p>Where in the world?</p>
-            <div>
+            <div onClick={setTheme}>
                 {darkMode ?
-                    <HiMoon onClick={setTheme} /> :
-                    <HiOutlineMoon onClick={setTheme} />
+                    <>
+                        <HiSun />
+                        <p>Light Mode</p>
+                    </>
+                    :
+                    <>
+                        <HiMoon />
+                        <p>Dark Mode</p>
+                    </>
                 }
-                <p>Dark Mode</p>
             </div>
         </HeaderStyle>
     )

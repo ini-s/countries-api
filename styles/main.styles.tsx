@@ -124,7 +124,7 @@ export const Dropdown = styled.ul`
     background-color: white;
     position: absolute;
     left: 0;
-    bottom: -11rem;
+    bottom: -13rem;
     z-index: 5;
     border-radius: 4px;
 
@@ -140,7 +140,7 @@ export const Dropdown = styled.ul`
     @media screen and (min-width: 767px){
         right: 0;
         left: auto;
-        bottom: -9rem;
+        bottom: -11rem;
     }
 `
 
@@ -229,6 +229,12 @@ export const Description = styled.div`
         background-color: #2B3743
     }
 
+    & > h2{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
     & > p{
         font-size: 14px;
     }

@@ -117,7 +117,7 @@ export default function Home() {
             </Dropdown>
           }
         </Top>
-        {search.length > 0 || search === "" ?
+        {search.length !== 0 && region.length !== 0?
           <Countries>
             {currentPost.map((country) => country.name.includes(search) &&
               <Link href={"/posts/" + country.name} key={country.name} >

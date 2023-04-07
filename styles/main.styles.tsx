@@ -210,7 +210,7 @@ export const CountriesBox = styled.section`
         }
 
         & > a > div{
-            width:3000px;
+            width:300px;
         }
     }
 `

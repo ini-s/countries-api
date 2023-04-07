@@ -128,6 +128,14 @@ export const Dropdown = styled.ul`
     z-index: 5;
     border-radius: 4px;
 
+    body.dark &{
+        background-color: #2B3743;
+    }
+
+    body.dark & > li {
+        background-color: #2B3743;
+    }
+
     & > li {
         font-size: 14px;
         margin-bottom: 0.5rem;

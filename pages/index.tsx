@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link';
 import GlobalStyles from "../styles/globals.styles"
 import {
-  Top, Search, SearchBox, SearchIcon, Filter, Countries, CountriesBox, Country, Flag,
+  Top, Search, SearchBox, SearchIcon, Filter, Countries, Country, Flag,
   Description, Bold, Dropdown, Btn, PageNumbers, Pagination, ErrorMessage
 } from '../styles/main.styles'
 import { BiSearch } from "react-icons/bi"
@@ -26,7 +26,6 @@ interface CountryProps {
 
 export default function Home() {
   const [search, setSearch] = useState<string>("")
-  const [region, setRegion] = useState<string>("")
   const [dropdown, setDropdown] = useState<boolean>(false)
   const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
   const data = postData || [];
@@ -36,11 +35,11 @@ export default function Home() {
   const postPerPage = 13
   const endIndex = currentPage * postPerPage
   const startIndex = endIndex - postPerPage
-  const currentPost = data.slice(startIndex, endIndex)
-  const filteredPostData = filteredPost.slice(startIndex, endIndex)
-  console.log(endIndex, startIndex, currentPost, filteredPostData)
+  const filteredPostData = filteredPost.length > 0 ? filteredPost.slice(startIndex, endIndex) : data.slice(startIndex, endIndex)
+  console.log(endIndex, startIndex, filteredPostData)
   const pageNumbers = []
-  const maxPageNumbers = Math.ceil(data.length / postPerPage)
+  const dataLength = filteredPost.length > 0 ? filteredPost.length : data.length
+  const maxPageNumbers = Math.ceil(dataLength / postPerPage)
   for (let i = 1; i <= maxPageNumbers; i++) {
     pageNumbers.push(i)
   }
@@ -67,17 +66,22 @@ export default function Home() {
   function showCountries(name: string) {
     const post = data.filter(country => country.region === name)
     if (name === "All") {
-      setRegion("")
       settFilteredPost(data)
     }
     else {
-      setRegion(name)
       settFilteredPost(post)
-      console.log(name)
-      console.log(region)
-      console.log(post)
     }
     setDropdown(false)
+    SetCurrentPage(1)
+  }
+
+  function setNextPage() {
+    if (currentPage === pageNumbers.length) {
+      SetCurrentPage(1)
+    }
+    else {
+      SetCurrentPage(currentPage => currentPage + 1)
+    }
   }
 
   if (error) return <p>Failed to load</p>
@@ -117,9 +121,9 @@ export default function Home() {
             </Dropdown>
           }
         </Top>
-        {search.length !== 0 && region.length !== 0?
-          <Countries>
-            {currentPost.map((country) => country.name.includes(search) &&
+        <Countries>
+          {search === "" ?
+            filteredPostData.map((country) =>
               <Link href={"/posts/" + country.name} key={country.name} >
                 <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -131,27 +135,10 @@ export default function Home() {
                   </Description>
                 </Country>
               </Link>
-            )}
-            <Pagination>
-              <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
-                <GrFormPrevious />
-              </Btn>
-              <PageNumbers>
-                {pageNumbers.map(pageNumber =>
-                  <div key={pageNumber} onClick={() => { SetCurrentPage(pageNumber) }}
-                    style={{ fontWeight: pageNumber === currentPage ? 600 : 200 }}>
-                    {pageNumber}
-                  </div>)}
-              </PageNumbers>
-              <Btn onClick={() => SetCurrentPage(currentPage => currentPage + 1)}>
-                <GrFormNext />
-              </Btn>
-            </Pagination>
-          </Countries>
-          :
-          <CountriesBox>{
-            region.length > 0 ?
-              filteredPostData.map(country => country.name.includes(search) &&
+            )
+            :
+            search.length > 0 ?
+              filteredPost.map(country => country.name.includes(search) &&
                 <Link href={"/posts/" + country.name} key={country.name} >
                   <Country>
                     <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -162,38 +149,29 @@ export default function Home() {
                       <p><Bold>Capital: </Bold>{country.capital}</p>
                     </Description>
                   </Country>
-                </Link>
-              ) :
-              currentPost.map(country => country.name.includes(search) &&
-                <Link href={"/posts/" + country.name} key={country.name} >
-                  <Country>
-                    <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description>
-                      <h2>{country.name}</h2>
-                      <p><Bold>Population: </Bold>{country.population}</p>
-                      <p><Bold>Region: </Bold>{country.region}</p>
-                      <p><Bold>Capital: </Bold>{country.capital}</p>
-                    </Description>
-                  </Country>
-                </Link>
-              )}
-            <Pagination>
-              <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
-                <GrFormPrevious />
-              </Btn>
-              <PageNumbers>
-                {pageNumbers.map(pageNumber =>
-                  <div key={pageNumber} onClick={() => { SetCurrentPage(pageNumber) }}
-                    style={{ fontWeight: pageNumber === currentPage ? 600 : 200 }}>
-                    {pageNumber}
-                  </div>)}
-              </PageNumbers>
-              <Btn onClick={() => SetCurrentPage(currentPage => currentPage + 1)}>
-                <GrFormNext />
-              </Btn>
-            </Pagination>
-          </CountriesBox>
-        }
+                </Link>)
+              :
+              <ErrorMessage>
+                No result for '<span>{search}</span>'
+              </ErrorMessage>
+          }
+          {search.length === 0 && <Pagination>
+            <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
+              <GrFormPrevious />
+            </Btn>
+            <PageNumbers>
+              {pageNumbers.map(pageNumber =>
+                <div key={pageNumber} onClick={() => { SetCurrentPage(pageNumber) }}
+                  style={{ fontWeight: pageNumber === currentPage ? 600 : 200, cursor: 'pointer' }}>
+                  {pageNumber}
+                </div>)}
+            </PageNumbers>
+            <Btn onClick={setNextPage}>
+              <GrFormNext />
+            </Btn>
+          </Pagination>
+          }
+        </Countries>
       </main>
     </>
   )

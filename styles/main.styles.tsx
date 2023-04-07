@@ -22,6 +22,7 @@ export const HeaderStyle = styled.header`
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: pointer;
     }
 
     & > div > svg{
@@ -184,45 +185,6 @@ export const Countries = styled.section`
     }
 `
 
-export const CountriesBox = styled.section`
-    margin: 2.8125rem 0 1.875rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-
-    
-    body.dark & > a{
-        color: hsl(0, 0%, 100%);
-    }
-
-    & > a{
-        flex-basis: 250px;
-        margin: 2.8125rem 0 1.875rem 0;
-        display: block;
-        color: black;
-    }
-
-    & > a > div{
-        width:250px;
-    }
-
-    @media screen and (min-width: 767px){
-        justify-content: start;
-        gap: 3rem;
-    }
-
-    @media screen and (min-width: 1200px){
-        & > a {
-            flex-basis: 300px;
-        }
-
-        & > a > div{
-            width:300px;
-        }
-    }
-`
-
 export const Country = styled.div`
     margin: 0 auto;
     border-radius: 6px;
@@ -287,9 +249,11 @@ export const Pagination = styled.div`
 export const Btn = styled.div`
     font-size: 2rem;
     display: flex;
+    cursor: pointer;
 
     body.dark &{
-        color: hsl(0, 0%, 100%);
+        background-color: hsl(0, 0%, 100%);
+        border-radius: 4px;
     }
 `
 

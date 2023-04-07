@@ -161,9 +161,17 @@ export const Countries = styled.section`
         color: black;
     }
 
+    & > a > div{
+        width:250px;
+    }
+
     @media screen and (min-width: 1200px){
         & > a{
         flex-basis: 300px;
+        }
+
+        & > a > div{
+            width:300px;
         }
     }
 `
@@ -187,6 +195,10 @@ export const CountriesBox = styled.section`
         color: black;
     }
 
+    & > a > div{
+        width:250px;
+    }
+
     @media screen and (min-width: 767px){
         justify-content: start;
         gap: 3rem;
@@ -195,6 +207,10 @@ export const CountriesBox = styled.section`
     @media screen and (min-width: 1200px){
         & > a {
             flex-basis: 300px;
+        }
+
+        & > a > div{
+            width:3000px;
         }
     }
 `

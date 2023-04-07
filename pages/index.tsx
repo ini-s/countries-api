@@ -3,7 +3,7 @@ import Link from 'next/link';
 import GlobalStyles from "../styles/globals.styles"
 import {
   Top, Search, SearchBox, SearchIcon, Filter, Countries, CountriesBox, Country, Flag,
-  Description, Bold, Dropdown, Btn, PageNumbers, Pagination
+  Description, Bold, Dropdown, Btn, PageNumbers, Pagination, ErrorMessage
 } from '../styles/main.styles'
 import { BiSearch } from "react-icons/bi"
 import { IoIosArrowDown } from "react-icons/io"
@@ -27,7 +27,6 @@ interface CountryProps {
 export default function Home() {
   const [search, setSearch] = useState<string>("")
   const [region, setRegion] = useState<string>("")
-  const [inputValue, setInputValue] = useState<string>("")
   const [dropdown, setDropdown] = useState<boolean>(false)
   const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
   const data = postData || [];
@@ -45,11 +44,6 @@ export default function Home() {
   for (let i = 1; i <= maxPageNumbers; i++) {
     pageNumbers.push(i)
   }
-  const filteredPageNumbers = []
-  const maxFilteredPageNumbers = Math.ceil(filteredPost.length / postPerPage)
-  for (let i = 1; i <= maxFilteredPageNumbers; i++) {
-    filteredPageNumbers.push(i)
-  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
@@ -58,13 +52,11 @@ export default function Home() {
     const otherLetters = value.slice(1)
     const countryName = capitalLetter + otherLetters
     console.log(countryName)
-    setInputValue(countryName)
-    countryName.length === 0 && setSearch("")
-  }
-
-  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      setSearch(inputValue)
+    if (countryName.length === 0) {
+      setSearch("")
+    }
+    else {
+      setSearch(countryName)
     }
   }
 
@@ -76,6 +68,7 @@ export default function Home() {
     const post = data.filter(country => country.region === name)
     if (name === "All") {
       setRegion("")
+      settFilteredPost(data)
     }
     else {
       setRegion(name)
@@ -103,7 +96,7 @@ export default function Home() {
         <Top>
           <Search>
             <SearchBox
-              type='text' placeholder='Search for a country...' onChange={handleChange} onKeyDown={handleKey}>
+              type='text' placeholder='Search for a country...' onChange={handleChange}>
             </SearchBox>
             <SearchIcon>
               <BiSearch />
@@ -124,9 +117,9 @@ export default function Home() {
             </Dropdown>
           }
         </Top>
-        {search.length === 0 && region.length === 0 ?
+        {search.length > 0 || search === "" ?
           <Countries>
-            {currentPost.map((country) =>
+            {currentPost.map((country) => country.name.includes(search) &&
               <Link href={"/posts/" + country.name} key={country.name} >
                 <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />

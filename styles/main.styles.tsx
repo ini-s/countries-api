@@ -101,7 +101,7 @@ export const Filter = styled.div`
     }
 `
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.div`
     color: black;
 
     & > span{

@@ -26,6 +26,7 @@ interface CountryProps {
 
 export default function Home() {
   const [search, setSearch] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState<boolean>(false)
   const [dropdown, setDropdown] = useState<boolean>(false)
   const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
   const data = postData || [];
@@ -137,25 +138,27 @@ export default function Home() {
               </Link>
             )
             :
-            search.length > 0 ?
-              filteredPost.map(country => country.name.includes(search) &&
-                <Link href={"/posts/" + country.name} key={country.name} >
-                  <Country>
-                    <Flag src={country.flag} alt="flag" width={250} height={150} />
-                    <Description>
-                      <h2>{country.name}</h2>
-                      <p><Bold>Population: </Bold>{country.population}</p>
-                      <p><Bold>Region: </Bold>{country.region}</p>
-                      <p><Bold>Capital: </Bold>{country.capital}</p>
-                    </Description>
-                  </Country>
-                </Link>)
-              :
-              <ErrorMessage>
-                No result for '<span>{search}</span>'
-              </ErrorMessage>
+            // search.length > 0 ?
+            filteredPost.map(country => country.name.includes(search) &&
+              <Link href={"/posts/" + country.name} key={country.name} >
+                <Country>
+                  <Flag src={country.flag} alt="flag" width={250} height={150} />
+                  <Description>
+                    <h2>{country.name}</h2>
+                    <p><Bold>Population: </Bold>{country.population}</p>
+                    <p><Bold>Region: </Bold>{country.region}</p>
+                    <p><Bold>Capital: </Bold>{country.capital}</p>
+                  </Description>
+                </Country>
+              </Link>
+              )
+            // :
           }
-          {search.length === 0 && <Pagination>
+          {/* {errorMessage &&
+            <ErrorMessage>
+              <p>No result for '<span>{search}</span>'</p>
+            </ErrorMessage>} */}
+          {search === "" && <Pagination>
             <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
               <GrFormPrevious />
             </Btn>

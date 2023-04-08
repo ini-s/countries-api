@@ -31,7 +31,7 @@ export default function Home() {
   const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
   const data = postData || [];
   const [currentPage, SetCurrentPage] = useState<number>(1)
-  const [filteredPost, settFilteredPost] = useState(data)
+  const [filteredPost, setFilteredPost] = useState(data)
 
   const postPerPage = 13
   const endIndex = currentPage * postPerPage
@@ -58,6 +58,7 @@ export default function Home() {
     else {
       setSearch(countryName)
     }
+    console.log(errorMessage)
   }
 
   function showDropdown() {
@@ -65,12 +66,15 @@ export default function Home() {
   }
 
   function showCountries(name: string) {
-    const post = data.filter(country => country.region === name)
+    console.log(
+      filteredPost.map(country => country.name.includes(search))
+    )
     if (name === "All") {
-      settFilteredPost(data)
+      setFilteredPost(data)
     }
     else {
-      settFilteredPost(post)
+      const post = data.filter(country => country.region === name)
+      setFilteredPost(post)
     }
     setDropdown(false)
     SetCurrentPage(1)
@@ -138,8 +142,7 @@ export default function Home() {
               </Link>
             )
             :
-            // search.length > 0 ?
-            data.map(country => country.name.includes(search) &&
+            filteredPost.map(country => country.name.includes(search) &&
               <Link href={"/posts/" + country.name} key={country.name}>
                 <Country>
                   <Flag src={country.flag} alt="flag" width={250} height={150} />
@@ -152,12 +155,11 @@ export default function Home() {
                 </Country>
               </Link>
               )
-            // :
           }
-          {/* {errorMessage &&
+          {errorMessage &&
             <ErrorMessage>
               <p>No result for '<span>{search}</span>'</p>
-            </ErrorMessage>} */}
+            </ErrorMessage>}
           {search === "" && <Pagination>
             <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
               <GrFormPrevious />

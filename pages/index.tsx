@@ -156,10 +156,10 @@ export default function Home() {
               </Link>
               )
           }
-          {errorMessage &&
+          {/* {errorMessage &&
             <ErrorMessage>
-              <p>No result for '<span>{search}</span>'</p>
-            </ErrorMessage>}
+              <p>No result for `&apos;`<span>{search}</span>`&apos;`</p>
+            </ErrorMessage>} */}
           {search === "" && <Pagination>
             <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
               <GrFormPrevious />

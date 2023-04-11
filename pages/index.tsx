@@ -9,7 +9,7 @@ import { BiSearch } from "react-icons/bi"
 import { IoIosArrowDown } from "react-icons/io"
 import { GrFormNext, GrFormPrevious } from "react-icons/gr"
 import useSWR from 'swr';
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Header from "../component/Header"
 
 const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
@@ -27,7 +27,6 @@ interface CountryProps {
 export default function Home() {
   const [search, setSearch] = useState<string>("")
   const [region, setRegion] = useState<string>("All")
-  const [errorMessage, setErrorMessage] = useState<boolean>(false)
   const [dropdown, setDropdown] = useState<boolean>(false)
   const { data: postData, error } = useSWR<CountryProps[], Error>('/api/staticdata', fetcher)
   const data = postData || [];
@@ -143,39 +142,34 @@ export default function Home() {
               </Link>
             )
             :
-            region === "All"?
-            data.map(country => country.name.includes(search) &&
-              <Link href={"/posts/" + country.name} key={country.name}>
-                <Country>
-                  <Flag src={country.flag} alt="flag" width={250} height={150} />
-                  <Description>
-                    <h2>{country.name}</h2>
-                    <p><Bold>Population: </Bold>{country.population}</p>
-                    <p><Bold>Region: </Bold>{country.region}</p>
-                    <p><Bold>Capital: </Bold>{country.capital}</p>
-                  </Description>
-                </Country>
-              </Link>
-              ):
+            region === "All" ?
+              data.map(country => country.name.includes(search) &&
+                <Link href={"/posts/" + country.name} key={country.name}>
+                  <Country>
+                    <Flag src={country.flag} alt="flag" width={250} height={150} />
+                    <Description>
+                      <h2>{country.name}</h2>
+                      <p><Bold>Population: </Bold>{country.population}</p>
+                      <p><Bold>Region: </Bold>{country.region}</p>
+                      <p><Bold>Capital: </Bold>{country.capital}</p>
+                    </Description>
+                  </Country>
+                </Link>
+              ) :
               filteredPost.map(country => country.name.includes(search) &&
-              <Link href={"/posts/" + country.name} key={country.name}>
-                <Country>
-                  <Flag src={country.flag} alt="flag" width={250} height={150} />
-                  <Description>
-                    <h2>{country.name}</h2>
-                    <p><Bold>Population: </Bold>{country.population}</p>
-                    <p><Bold>Region: </Bold>{country.region}</p>
-                    <p><Bold>Capital: </Bold>{country.capital}</p>
-                  </Description>
-                </Country>
-              </Link>
+                <Link href={"/posts/" + country.name} key={country.name}>
+                  <Country>
+                    <Flag src={country.flag} alt="flag" width={250} height={150} />
+                    <Description>
+                      <h2>{country.name}</h2>
+                      <p><Bold>Population: </Bold>{country.population}</p>
+                      <p><Bold>Region: </Bold>{country.region}</p>
+                      <p><Bold>Capital: </Bold>{country.capital}</p>
+                    </Description>
+                  </Country>
+                </Link>
               )
-
           }
-          {errorMessage &&
-            <ErrorMessage>
-              <p>No result for "<span>{search}</span>"</p>
-            </ErrorMessage>}
           {search === "" && <Pagination>
             <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
               <GrFormPrevious />

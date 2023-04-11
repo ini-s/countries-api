@@ -111,7 +111,7 @@ export const ErrorMessage = styled.div`
 
 export const Top = styled.section`
     body.dark &{
-        background-color: hsl(207, 26%, 17%)
+        background-color: hsl(207, 26%, 17%) !important;
     }
     position: relative;
     @media screen and (min-width: 767px){
@@ -165,7 +165,7 @@ export const Countries = styled.section`
 
     body.dark & > a{
         color: hsl(0, 0%, 100%);
-        background-color: hsl(207, 26%, 17%);
+        background-color: hsl(207, 26%, 17%) !important;
     }
 
     & > a{

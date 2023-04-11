@@ -164,7 +164,8 @@ export const Countries = styled.section`
     gap: 1rem;
 
     body.dark & > a{
-        color: hsl(0, 0%, 100%)
+        color: hsl(0, 0%, 100%);
+        background-color: hsl(207, 26%, 17%);
     }
 
     & > a{

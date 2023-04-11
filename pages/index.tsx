@@ -59,6 +59,7 @@ export default function Home() {
     else {
       setSearch(countryName)
     }
+    // data.map(country => country.name.includes(search)? setErrorMessage(false) : setErrorMessage(true))
     console.log(errorMessage)
   }
 
@@ -67,9 +68,6 @@ export default function Home() {
   }
 
   function showCountries(name: string) {
-    console.log(
-      filteredPost.map(country => country.name.includes(search))
-    )
     if (name === "All") {
       setFilteredPost(data)
       setRegion("All")
@@ -174,10 +172,10 @@ export default function Home() {
               )
 
           }
-          {/* {errorMessage &&
+          {errorMessage &&
             <ErrorMessage>
-              <p>No result for '<span>{search}</span>'</p>
-            </ErrorMessage>} */}
+              <p>No result for "<span>{search}</span>"</p>
+            </ErrorMessage>}
           {search === "" && <Pagination>
             <Btn onClick={() => SetCurrentPage(currentPage => currentPage - 1)}>
               <GrFormPrevious />

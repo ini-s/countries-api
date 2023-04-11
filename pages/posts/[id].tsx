@@ -2,11 +2,9 @@ import Head from 'next/head'
 import GlobalStyles from "../../styles/globals.styles"
 import { Link, BackBtn, DetailsBox, ImageBox, DesktopImageBox, Col, Cols, Borders } from "../../styles/[id].styles"
 import { HiOutlineArrowLeft } from "react-icons/hi"
-import { GetServerSideProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import Header from "../../component/Header"
 import fs from 'fs/promises';
-// const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
-// const dev = process.env.NODE_ENV !== 'production';
 
 interface CurrencyProp {
     name: string,
@@ -86,29 +84,12 @@ export default function Post(props: { countryData: CountryProps, hasError: boole
     )
 }
 
-// async function getData() {
-//     // const data = fetcher(dev? 'http://localhost:3000/api/staticdata' : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`)
-//     const vercel_public_domain = process.env.NEXT_PUBLIC_DOMAIN
-//     const data = fetcher(vercel_public_domain ? vercel_public_domain : (dev ? `http://localhost:3000/api/staticdata` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/staticdata`))
-//     return data
-// }
-
 async function getData() {
     const filePath = process.cwd() + '/data.json';
     const fileData = await fs.readFile(filePath);
     const data = JSON.parse(fileData.toString());
     return data;
 }
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//     const data = await getData();
-//     const pathsWithParams = data.map((country: CountryProps) => ({ params: { id: country.name } }))  //optional chaining data?.map ie. in the case where data may be undefined so only map the data when it has a value
-
-//     return {
-//         paths: pathsWithParams,
-//         fallback: true
-//     }
-// }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const itemID = context.params?.id;

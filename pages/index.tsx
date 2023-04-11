@@ -58,8 +58,6 @@ export default function Home() {
     else {
       setSearch(countryName)
     }
-    // data.map(country => country.name.includes(search)? setErrorMessage(false) : setErrorMessage(true))
-    console.log(errorMessage)
   }
 
   function showDropdown() {

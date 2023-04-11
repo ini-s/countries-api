@@ -110,6 +110,9 @@ export const ErrorMessage = styled.div`
 `
 
 export const Top = styled.section`
+    body.dark &{
+        background-color: hsl(207, 26%, 17%)
+    }
     position: relative;
     @media screen and (min-width: 767px){
         display: flex;

@@ -9,7 +9,7 @@ import { BiSearch } from "react-icons/bi"
 import { IoIosArrowDown } from "react-icons/io"
 import { GrFormNext, GrFormPrevious } from "react-icons/gr"
 import useSWR from 'swr';
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Header from "../component/Header"
 
 const fetcher = (url: RequestInfo | URL) => fetch(url).then((res) => res.json()).then((res) => JSON.parse(res));
@@ -25,6 +25,7 @@ interface CountryProps {
 }
 
 export default function Home() {
+  const ref = useRef<HTMLUListElement>(null)
   const [search, setSearch] = useState<string>("")
   const [region, setRegion] = useState<string>("All")
   const [dropdown, setDropdown] = useState<boolean>(false)
@@ -45,6 +46,20 @@ export default function Home() {
     pageNumbers.push(i)
   }
 
+  useEffect(() => {
+    function handleClick(e: any) {
+      if (!ref.current?.contains(e.target)) {
+        setDropdown(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClick)
+    return (
+      () => {
+        document.removeEventListener("mousedown", handleClick)
+      }
+    )
+  }, [dropdown])
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
     const firstLetter = value.charAt(0)
@@ -58,7 +73,6 @@ export default function Home() {
     else {
       setSearch(countryName)
     }
-    setDropdown(false)
   }
 
   function showDropdown() {
@@ -111,11 +125,11 @@ export default function Home() {
             </SearchIcon>
           </Search>
           <Filter onClick={showDropdown}>
-            <p>{region === 'All'? 'Filter by Region' : region}</p>
+            <p>{region === 'All' ? 'Filter by Region' : region}</p>
             <div><IoIosArrowDown /></div>
           </Filter>
           {dropdown &&
-            <Dropdown>
+            <Dropdown ref={ref}>
               <li onClick={() => showCountries('All')}>All</li>
               <li onClick={() => showCountries('Africa')}>Africa</li>
               <li onClick={() => showCountries('Americas')}>America</li>

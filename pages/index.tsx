@@ -58,6 +58,7 @@ export default function Home() {
     else {
       setSearch(countryName)
     }
+    setDropdown(false)
   }
 
   function showDropdown() {
@@ -110,7 +111,7 @@ export default function Home() {
             </SearchIcon>
           </Search>
           <Filter onClick={showDropdown}>
-            <p>Filter by Region</p>
+            <p>{region === 'All'? 'Filter by Region' : region}</p>
             <div><IoIosArrowDown /></div>
           </Filter>
           {dropdown &&
